@@ -1,13 +1,20 @@
 from pyspark.sql import SparkSession
 
+# Argument parser (at that path you should have the following files:)
+# [movies.csv, ratings.csv, tags.csv, links.csv]
+parser = argparse.ArgumentParser(description="Analyze MovieLens Ratings")
+parser.add_argument("--path", required=True, help="Path to the folder containing MovieLens files")
+args = parser.parse_args()
+
+# Define file paths
+base_path = args.path
+movies_file = os.path.join(base_path, "movies.csv")
+ratings_file = os.path.join(base_path, "ratings.csv")
+
 # Initialize SparkSession
 spark = SparkSession.builder \
     .appName("MovieLens - Analyze Ratings") \
     .getOrCreate()
-
-# Define file paths
-movies_file = "data/movies.csv"
-ratings_file = "data/ratings.csv"
 
 # Load datasets
 movies = spark.read.csv(movies_file, header=True, inferSchema=True)
