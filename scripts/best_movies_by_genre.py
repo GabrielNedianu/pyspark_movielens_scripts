@@ -48,9 +48,9 @@ def main():
     # Show results
     best_movies_df.show(truncate=False)
 
-    # Paths for saving
-    csv_output_path = "/movielens/output_best_movies_by_genre.csv"
-    txt_output_path = "/movielens/output_best_movies_by_genre.txt"
+    # Paths for saving (relative to hdfs)
+    csv_output_path = "hdfs:///movielens/output_best_movies_by_genre.csv"
+    txt_output_path = "hdfs:///movielens/output_best_movies_by_genre.txt"
 
     # Save to CSV (structured format)
     best_movies_df.write.mode("overwrite").csv(csv_output_path, header=True)
