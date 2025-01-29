@@ -57,9 +57,11 @@ def main():
     print(f"Results saved as CSV in {csv_output_path}")
 
     # Save to TXT (human-readable)
-    with open(txt_output_path, "w") as txt_file:
-        for row in best_movies_df.collect():
-            txt_file.write(f"{row['genre']}: {row['title']} (Avg Rating: {row['avg_rating']:.2f}, Votes: {row['num_ratings']}) - {row['imdb_link']}\n")
+    rdd = spark.sparkContext.parallelize(
+        [f"{genre}: {row['title']} ({row['movieId']}) - Link: https://www.imdb.com/title/tt{row['imdbId']}/"
+        for genre, row in best_movies.items()]
+    )
+    rdd.saveAsTextFile(txt_output_path)
 
     print(f"Results saved as TXT in {txt_output_path}")
 
