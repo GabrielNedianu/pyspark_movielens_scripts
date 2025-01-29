@@ -59,7 +59,7 @@ def main():
     # Save to TXT (human-readable)
     rdd = spark.sparkContext.parallelize(
         [f"{genre}: {row['title']} ({row['movieId']}) - Link: https://www.imdb.com/title/tt{row['imdbId']}/"
-        for genre, row in best_movies.items()]
+        for genre, row in best_movies_df.items()]
     )
     rdd.saveAsTextFile(txt_output_path)
 
