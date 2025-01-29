@@ -56,11 +56,8 @@ def main():
     best_movies_df.write.mode("overwrite").csv(csv_output_path, header=True)
     print(f"Results saved as CSV in {csv_output_path}")
 
-    # Save to TXT (human-readable)
-    rdd = spark.sparkContext.parallelize(
-        [f"{genre}: {row['title']} ({row['movieId']}) - Link: https://www.imdb.com/title/tt{row['imdbId']}/"
-        for genre, row in best_movies_df.items()]
-    )
+    # Convert DataFrame to an RDD and save as text
+    rdd = best_movies_df.rdd.map(lambda row: f"Genre: {row.genre} | Movie: {row.title} | Rating: {row.avg_rating:.2f} | Ratings: {row.num_ratings} | IMDB: {row.imdb_link}")
     rdd.saveAsTextFile(txt_output_path)
 
     print(f"Results saved as TXT in {txt_output_path}")
