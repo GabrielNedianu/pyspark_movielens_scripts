@@ -1,5 +1,6 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, avg, count, stddev, year, explode, split, desc, row_number, lit
+from pyspark.sql.functions import from_unixtime, year
 from pyspark.sql.window import Window
 import argparse
 
@@ -31,10 +32,11 @@ def main():
     top_movies.write.mode("overwrite").csv(output_path + "top_movies_by_rating.csv", header=True)
 
     # 3️⃣ **Top Rated Movies Over Time** (Line Chart)
-    ratings_over_time = ratings_df.withColumn("year", year("timestamp")) \
+    ratings_over_time = ratings_df.withColumn("year", year(from_unixtime(col("timestamp")))) \
                                   .groupBy("year", "movieId") \
                                   .agg(avg("rating").alias("avg_rating"), count("rating").alias("num_ratings"))
-    ratings_over_time = ratings_over_time.join(movies_df, "movieId").select("year", "title", "avg_rating", "num_ratings")
+    ratings_over_time = ratings_over_time.join(movies_df, "movieId") \
+                                         .select("year", "title", "avg_rating", "num_ratings")
     ratings_over_time.write.mode("overwrite").csv(output_path + "top_movies_over_time.csv", header=True)
 
     # 4️⃣ **Most Popular Genres Over Time** (Stacked Bar Chart)
