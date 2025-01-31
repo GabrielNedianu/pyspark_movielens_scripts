@@ -1,0 +1,3 @@
+spark-submit --master local[*] scripts/load_data.py --path hdfs:///movielens/
+spark-submit --master local[*] scripts/best_movies_by_genre.py --path hdfs:///movielens/
+spark-submit --master local[*] scripts/generate_chart_data.py --path hdfs:///movielens/
