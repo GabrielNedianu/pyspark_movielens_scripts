@@ -1,0 +1,5 @@
+docker ps
+docker exec -it c7a97065c7d9 /bin/bash
+hdfs dfs -copyToLocal /movielens/charts /tmp/
+exit
+docker cp c7a97065c7d9:/tmp/charts C:\Programming\Movie_Lens\
